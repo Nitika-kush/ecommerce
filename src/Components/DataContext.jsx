@@ -98,13 +98,14 @@ export const DataProvider = ({ children }) => {
 
   const addToCart = (product) => {
     if (user) {
-      const updatedCart=[...cart,product];
+      const updatedCart = [...cart, product];
       setCart(updatedCart);
-      localStorage.setItem("cart",JSON.stringify(updatedCart));
-    }else{
-      console.log("Please Sign up to add product in cart")
+      localStorage.setItem("cart", JSON.stringify(updatedCart)); 
+    } else {
+      console.log("Please Sign up to add product in cart");
     }
   };
+  
 
   // Logout the user
   const logoutUser = () => {
@@ -119,7 +120,7 @@ export const DataProvider = ({ children }) => {
 
   return (
     <DataContext.Provider
-      value={{ data, newProductList, user, signupUser, loginUser, logoutUser,addToCart }}
+      value={{ data, newProductList, user, signupUser, loginUser, logoutUser,cart,addToCart }}
     >
       {children}
     </DataContext.Provider>

@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 import { DataContext } from './DataContext'
 
 function Navbar() {
-  const {user,logoutUser}= useContext(DataContext);
+  const {user,logoutUser,cart}= useContext(DataContext);
   return (
     <div className='navbar'>
       <div>
@@ -16,6 +16,8 @@ function Navbar() {
         {user?(<>
           <Link to='/product'>Products</Link>
           <Link to="/product/addProductDetail">Add Products</Link>
+          <Link to="/product/cart">Cart {/* ({cart ? cart.length : 0}) */}</Link>
+          <Link to ="product/wishlist">Wishlist</Link>
           <button className='logout-button' onClick={logoutUser}>Logout</button>
         </>
         

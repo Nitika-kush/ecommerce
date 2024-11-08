@@ -10,6 +10,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import SignupForm from './Components/SignupForm'
 import Login from './Components/Login'
+import Cart from './Components/child-components/Cart'
 
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
             <Route path='/product/addProdctDetail/:id' element={<AddProductDetail/>}></Route>
             <Route path='/signupPage' element={<SignupForm/>}></Route>
             <Route path='/loginPage' element={<Login/>}></Route>
+            <Route path='/product/cart' element={<Cart/>} ></Route>
           </Routes>
           </DataProvider> 
     </>

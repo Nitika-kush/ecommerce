@@ -14,7 +14,9 @@ function Products() {
       console.log('please Sign up to add product in cart')
     }
   }
-
+  if (!data || data.length === 0) {
+    return <div>Loading products...</div>;
+  }
   return (
     <div className='card'>
     {data && data.map((product,index) => (
@@ -29,12 +31,12 @@ function Products() {
           </ul>
          
           <h3 className='product-price'>${product.price}</h3>
-         {/*  <h3>Rating :${product.rating.rate}</h3> */}
+          <h3>Rating :{product.rating.rate}</h3>
           <button className='product-button'>Buy now</button>
         </Link>
-        <div>
+        <div className=''>
         <button>Wishlist</button>
-        <button onClick={handleAddToCart}>Add-to cart</button>
+        <button className='cart-button' onClick={() => handleAddToCart(product)}>Add-to cart</button>
         </div>
       </div>
     ))}

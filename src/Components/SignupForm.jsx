@@ -49,7 +49,6 @@ const SignupForm= () => {
     setErrors(newErrors);
   
     if (formIsValid) {
-      // Ensure 'user' is an array before calling .some()
       const duplicateUser = Array.isArray(user) && user.some(
         (userItem) => userItem.email === userData.email
       );

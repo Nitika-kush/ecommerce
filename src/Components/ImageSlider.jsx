@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from 'react-slick'; // Import the slider component
+import Slider from 'react-slick'; 
 
 const ImageSlider = () => {
   const images = [
@@ -10,16 +10,16 @@ const ImageSlider = () => {
 
   ];
 
-  // Slick Slider settings
+
   const settings = {
-    dots: true, // Show navigation dots
-    infinite: true, // Infinite loop sliding
-    speed: 400, // Animation speed
-    slidesToShow: 1, // Number of slides visible at once
-    slidesToScroll: 1, // Number of slides to scroll per click
-    autoplay: true, // Enable autoplay
-    autoplaySpeed: 2000, // Time between slides in ms
-    arrows: true, // Show next/prev arrows
+    dots: true,
+    infinite: true, 
+    speed: 400, 
+    slidesToShow: 1,
+    slidesToScroll: 1, 
+    autoplay: true,
+    autoplaySpeed: 2000,
+    arrows: true,
   };
 
   return (

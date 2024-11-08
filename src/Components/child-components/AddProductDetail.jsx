@@ -20,12 +20,6 @@ const AddProductDetail = () => {
   const { data, newProductList } = useContext(DataContext);
   const [images, setImages] = useState(null);
 
-  // const titleRef=useRef();
-  // const descriptionRef=useRef();
-  // const categoryRef=useRef();
-  // const priceRef= useRef();
-  // const ratingRef= useRef();
-  // const refs= [titleRef,descriptionRef,categoryRef,priceRef,ratingRef];
 
   const handleSubmit = (e) => {
     e.preventDefault();

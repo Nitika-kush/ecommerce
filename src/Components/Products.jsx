@@ -2,12 +2,19 @@ import React,{useEffect,useState,useContext} from 'react'
 import {Link,Routes,Route} from 'react-router-dom'
 import ProductDetail from './child-components/ProductDetail';
 import { DataContext } from './DataContext'
-//import { stockData } from "./data";
 
 function Products() {
-  const { getData,data } = useContext(DataContext);
+  const { user,addToCart,data } = useContext(DataContext);
   console.log("data in Products Component", data);
-// const productData=getData();
+
+ const handleAddToCart=(product)=>{
+    if(user){
+      addToCart(product);
+    }else{
+      console.log('please Sign up to add product in cart')
+    }
+  }
+
   return (
     <div className='card'>
     {data && data.map((product,index) => (
@@ -25,6 +32,10 @@ function Products() {
          {/*  <h3>Rating :${product.rating.rate}</h3> */}
           <button className='product-button'>Buy now</button>
         </Link>
+        <div>
+        <button>Wishlist</button>
+        <button onClick={handleAddToCart}>Add-to cart</button>
+        </div>
       </div>
     ))}
   </div>

@@ -98,11 +98,99 @@ export const DataProvider = ({ children }) => {
 
   const addToCart = (product) => {
     if (user) {
+      const exists = cart.some((cartItem) => cartItem.id === product.id);
+      if (exists) {
+        console.log("Product is already in the Cart.");
+        return; 
+      }
+
       const updatedCart = [...cart, product];
       setCart(updatedCart);
-      localStorage.setItem("cart", JSON.stringify(updatedCart)); 
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+  
+      fetch(`http://localhost:3000/users/${user.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cart: updatedCart }),
+      })
+      /*   .then((response) => response.json())
+        .then((updatedUser) => {
+          console.log("Cart updated on the server:", updatedUser);
+        })
+        .catch((error) => {
+          console.error("Error updating cart on the server:", error);
+        }); */
     } else {
-      console.log("Please Sign up to add product in cart");
+      console.log("Please Sign up to add products to the cart.");
+    }
+  };
+  
+
+  const removeFromCart=(productId)=>{
+    if(user){
+      const updatedCart = cart.filter((product) => product.id !== productId);
+      setCart(updatedCart);
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+  
+     
+      fetch(`http://localhost:3000/users/${user.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cart: updatedCart }), 
+      })
+    } else {
+      console.log("Please Sign up to remove products from the wishlist.");
+    }
+   
+  }
+
+
+  const addToWishlist = (product) => {
+    if (user) {
+      const exists = wishlist.some((wishlistProduct) => wishlistProduct.id === product.id);
+      if (exists) {
+        console.log("Product is already in the wishlist.");
+        return;
+      }
+      
+      const updatedWishlist = [...wishlist, product];
+      setWishlist(updatedWishlist);
+      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+  
+
+      fetch(`http://localhost:3000/users/${user.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ whislist: updatedWishlist }),
+      })
+    } else {
+      console.log("Please Sign up to remove products from the cart.");
+    }
+  };
+  
+  
+  const removeFromWishlist = (productId) => {
+    if (user) {
+      const updatedWishlist = wishlist.filter((product) => product.id !== productId);
+      setWishlist(updatedWishlist);
+      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+  
+     
+      fetch(`http://localhost:3000/users/${user.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ whislist: updatedWishlist }), 
+      })
+    } else {
+      console.log("Please Sign up to remove products from the wishlist.");
     }
   };
   
@@ -120,7 +208,8 @@ export const DataProvider = ({ children }) => {
 
   return (
     <DataContext.Provider
-      value={{ data, newProductList, user, signupUser, loginUser, logoutUser,cart,addToCart }}
+      value={{ data, newProductList, user, signupUser, 
+        loginUser, logoutUser,cart,addToCart,wishlist,addToWishlist ,removeFromWishlist,removeFromCart}}
     >
       {children}
     </DataContext.Provider>

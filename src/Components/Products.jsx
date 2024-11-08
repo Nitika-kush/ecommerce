@@ -4,7 +4,7 @@ import ProductDetail from './child-components/ProductDetail';
 import { DataContext } from './DataContext'
 
 function Products() {
-  const { user,addToCart,data } = useContext(DataContext);
+  const { user,addToCart,data ,addToWishlist} = useContext(DataContext);
   console.log("data in Products Component", data);
 
  const handleAddToCart=(product)=>{
@@ -14,6 +14,14 @@ function Products() {
       console.log('please Sign up to add product in cart')
     }
   }
+const handleAddToWishlist=(product)=>{
+  if(user){
+    addToWishlist(product);
+  }else{
+    console.log('please Sign up to add product in wishlist')
+  }
+}
+
   if (!data || data.length === 0) {
     return <div>Loading products...</div>;
   }
@@ -35,7 +43,7 @@ function Products() {
           <button className='product-button'>Buy now</button>
         </Link>
         <div className=''>
-        <button>Wishlist</button>
+        <button onClick={() => handleAddToWishlist(product)}>Wishlist</button>
         <button className='cart-button' onClick={() => handleAddToCart(product)}>Add-to cart</button>
         </div>
       </div>

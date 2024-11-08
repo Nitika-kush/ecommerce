@@ -11,25 +11,10 @@ import "slick-carousel/slick/slick-theme.css";
 import SignupForm from './Components/SignupForm'
 import Login from './Components/Login'
 import Cart from './Components/child-components/Cart'
+import Wishlist from './Components/child-components/Wishlist'
 
 
 function App() {
-//   const [data,setData]=useState([]);
-
-//   const getData = () => {
-//     fetch('https://dummyjson.com/products')
-//       .then((response) => response.json()) // Handling the promise correctly
-//       .then((responseData) => {
-//         setData(responseData.products); // Assuming you want the products array
-//         console.log(responseData.products); // Logging the products
-//       })
-//       .catch((error) => {
-//         console.log(error);
-//       });
-//   };
-// useEffect(()=>{
-//  getData();
-// },[])
   return (
     <>
        <DataProvider> 
@@ -45,6 +30,7 @@ function App() {
             <Route path='/signupPage' element={<SignupForm/>}></Route>
             <Route path='/loginPage' element={<Login/>}></Route>
             <Route path='/product/cart' element={<Cart/>} ></Route>
+            <Route path='/product/wishlist' element={<Wishlist/>}></Route>
           </Routes>
           </DataProvider> 
     </>

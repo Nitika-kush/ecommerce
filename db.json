@@ -17,6 +17,15 @@
       "confirmPassword": "12345",
       "cart": [],
       "whislist": []
+    },
+    {
+      "id": "16d9",
+      "name": "Radha",
+      "email": "radha@gmail.com",
+      "password": "12345",
+      "confirmPassword": "12345",
+      "cart": [],
+      "whislist": []
     }
   ],
   "products": [

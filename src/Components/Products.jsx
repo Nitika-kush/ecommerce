@@ -5,7 +5,9 @@ import { DataContext } from './DataContext'
 
 function Products() {
   const { user,addToCart,data ,addToWishlist} = useContext(DataContext);
+ if(user){
   console.log("data in Products Component", data);
+ }
 
  const handleAddToCart=(product)=>{
     if(user){
@@ -22,8 +24,8 @@ const handleAddToWishlist=(product)=>{
   }
 }
 
-  if (!data || data.length === 0) {
-    return <div>Loading products...</div>;
+  if (!data) {
+    alert("Loading products...");
   }
   return (
     <div className='card'>

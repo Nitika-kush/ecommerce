@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DataContext } from "./DataContext";
 
 const Login = () => {
@@ -8,7 +8,13 @@ const Login = () => {
     password: "",
   });
   const [errors, setErrors] = useState({});
+  const [token, setToken] = useState(null); 
   const { loginUser } = useContext(DataContext);
+  const navigate =useNavigate();
+    
+  function generateRandomToken() {
+    return Math.random().toString(36); // Generate a random token
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -25,14 +31,18 @@ const Login = () => {
    
     if (userIsValid) {
       const success = loginUser(input);
-      //if login failed
+      
       if (!success) {
         setErrors((prevErrors) => ({
           ...prevErrors,
           invalidCred: "Invalid email or password",
         }));
       } else {
-        //console.log('Submitted', { email, password });
+        const newToken = generateRandomToken();
+        setToken(newToken); 
+        localStorage.setItem("token",newToken);
+        navigate('/');
+
         setInput({
           email: "",
           password: "",

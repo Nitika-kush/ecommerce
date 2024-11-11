@@ -13,6 +13,7 @@ const SignupForm= () => {
   const {user,signupUser}=useContext(DataContext);
   const navigate=useNavigate();
 
+
   const handleChange=(e)=>{
     const {name,value}=e.target;
     setUserData((prevData)=>({...prevData,[name]:value}));
@@ -25,13 +26,13 @@ const SignupForm= () => {
     }
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
     let formIsValid = true;
     const newErrors = {};
     console.log(userData);
   
-    // Checking empty fields
+
     Object.keys(userData).forEach((key) => {
       if (userData[key].trim().length === 0) {
         newErrors[key] = `${key} is required`;
@@ -44,31 +45,35 @@ const SignupForm= () => {
       formIsValid = false;
     }
   
-    console.log(formIsValid);
-  
     setErrors(newErrors);
   
     if (formIsValid) {
-      const duplicateUser = Array.isArray(user) && user.some(
-        (userItem) => userItem.email === userData.email
-      );
-  
-      if (duplicateUser) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          email: 'Email already exists'
-        }));
-        setUserData({
-          name: "",
-          email: "",
-          password: "",
-          confirmPassword: ""
-        });
-        return;
+      try {
+        const response = await fetch('http://localhost:3000/users');
+        const existingUsers = await response.json();
+
+        const duplicateUser = existingUsers.find(
+          (userItem) => userItem.email === userData.email
+        );
+
+        if (duplicateUser) {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            email: 'Email already exists',
+          }));
+          setUserData({
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+          });
+        } else {
+          signupUser(userData);
+
+        }
+      } catch (error) {
+        console.error("Error fetching users:", error);
       }
-  
-      signupUser({...userData, cart:[], whislist:[]});
-      navigate('/');
     }
   };
   

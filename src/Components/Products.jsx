@@ -2,9 +2,11 @@ import React,{useEffect,useState,useContext} from 'react'
 import {Link,Routes,Route} from 'react-router-dom'
 import ProductDetail from './child-components/ProductDetail';
 import { DataContext } from './DataContext'
+import { IoIosHeart } from "react-icons/io";
+import { BsCart } from "react-icons/bs";
 
 function Products() {
-  const { user,addToCart,data ,addToWishlist} = useContext(DataContext);
+  const { user,addToCart,data ,toggleWishlist,wishlist} = useContext(DataContext);
  if(user){
   console.log("data in Products Component", data);
  }
@@ -16,9 +18,9 @@ function Products() {
       console.log('please Sign up to add product in cart')
     }
   }
-const handleAddToWishlist=(product)=>{
+const handleWishlist=(product)=>{
   if(user){
-    addToWishlist(product);
+    toggleWishlist(product);
   }else{
     console.log('please Sign up to add product in wishlist')
   }
@@ -47,8 +49,17 @@ const handleAddToWishlist=(product)=>{
 
         <div style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
         <button className='product-button'>Buy now</button>
-        <button className='product-button' onClick={() => handleAddToWishlist(product)}>Wishlist</button>
-        <button className='product-button' onClick={() => handleAddToCart(product)}>Add-to cart</button>
+        <IoIosHeart onClick={()=>handleWishlist(product)}
+        style={{fontSize:"30px" ,color: wishlist.some((item)=>item.id===product.id)?"red":'gray'}} />
+
+       {/*  <button className='product-button' onClick={() => handleWishlist(product)}
+        style={{
+                backgroundColor: wishlist.some((item) => item.id === product.id) ? 'green' : 'gray',
+                color: 'white'
+              }}
+            >
+              {wishlist.some((item) => item.id === product.id) ? <IoIosHeart/> : <IoIosHeart/>}</button> */}
+        <BsCart onClick={() => handleAddToCart(product)} style={{fontSize: '30px' }}/>
         </div>
       </div>
     ))}

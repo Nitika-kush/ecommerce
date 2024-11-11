@@ -4,7 +4,6 @@ import Home from "./Components/Home";
 import Navbar from "./Components/Navbar";
 import Products from "./Components/Products";
 import { DataProvider } from "./Components/DataContext";
-import AddProductDetail from "./Components/child-components/AddProductDetail";
 import ProductDetail from "./Components/child-components/ProductDetail";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -23,19 +22,11 @@ function App() {
         </div>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route
-            path="/product/addProductDetail"
-            element={<AddProductDetail />}
-          ></Route>
-          <Route path="/product/:id" element={<ProductDetail />}></Route>
-          <Route
-            path="/product/addProdctDetail/:id"
-            element={<AddProductDetail />}
-          ></Route>
           <Route path="/signupPage" element={<SignupForm />}></Route>
           <Route path="/loginPage" element={<Login />}></Route>
           <Route element={<ProtectedRoutes />}>
             <Route path="/product" element={<Products />}></Route>
+            <Route path="/product/:id" element={<ProductDetail />}></Route>
             <Route path="/cart" element={<Cart />} />
           <Route path="/wishlist" element={<Wishlist />} />
           </Route>

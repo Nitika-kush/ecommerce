@@ -23,7 +23,6 @@ function App() {
         </div>
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* <Route path='/product' element={<Products />} /> */}
           <Route
             path="/product/addProductDetail"
             element={<AddProductDetail />}
@@ -35,21 +34,11 @@ function App() {
           ></Route>
           <Route path="/signupPage" element={<SignupForm />}></Route>
           <Route path="/loginPage" element={<Login />}></Route>
-          {/*  <Route path='/product/cart' element={<Cart/>} ></Route>
-            <Route path='/product/wishlist' element={<Wishlist/>}></Route> */}
-          {/* <Route element={<ProtectedRoutes />}>
-            <Route path="/product" element={<Products />}>
-            <Route path="/product/cart" element={<Cart />} />
-            <Route path="/product/wishlist" element={<Wishlist />} />
-            </Route>
-          </Route> */}
            <Route element={<ProtectedRoutes />}>
             <Route path="/product" element={<Products />}>
-              {/* No nested routes for cart and wishlist, handle them directly */}
+             
             </Route>
           </Route>
-
-          {/* These should be independent of /product */}
           <Route path="/product/cart" element={<Cart />} />
           <Route path="/product/wishlist" element={<Wishlist />} />
         </Routes>

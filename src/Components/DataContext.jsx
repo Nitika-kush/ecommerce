@@ -198,6 +198,7 @@ export const DataProvider = ({ children }) => {
   // Logout the user
   const logoutUser = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     setUser(null);
     navigate("/");
   };

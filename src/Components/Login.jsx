@@ -13,7 +13,7 @@ const Login = () => {
   const navigate =useNavigate();
     
   function generateRandomToken() {
-    return Math.random().toString(36); // Generate a random token
+    return Math.random().toString(36); 
   }
 
   const handleSubmit = (event) => {

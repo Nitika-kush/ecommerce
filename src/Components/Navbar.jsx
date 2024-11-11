@@ -15,7 +15,7 @@ function Navbar() {
         
         {user?(<>
           <Link to='/product'>Products</Link>
-          <Link to="/product/addProductDetail">Add Products</Link>
+         {/*  <Link to="/product/addProductDetail">Add Products</Link> */}
           <Link to="/product/cart">Cart ({cart ? cart.length : 0})</Link>
           <Link to ="/product/wishlist">Wishlist ({wishlist ?wishlist.length : 0})</Link>
           <button className='logout-button' onClick={logoutUser}>Logout</button>

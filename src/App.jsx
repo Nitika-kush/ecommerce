@@ -34,13 +34,12 @@ function App() {
           ></Route>
           <Route path="/signupPage" element={<SignupForm />}></Route>
           <Route path="/loginPage" element={<Login />}></Route>
-           <Route element={<ProtectedRoutes />}>
-            <Route path="/product" element={<Products />}>
-             
-            </Route>
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/product" element={<Products />}></Route>
+            <Route path="/cart" element={<Cart />} />
+          <Route path="/wishlist" element={<Wishlist />} />
           </Route>
-          <Route path="/product/cart" element={<Cart />} />
-          <Route path="/product/wishlist" element={<Wishlist />} />
+         
         </Routes>
       </DataProvider>
     </>

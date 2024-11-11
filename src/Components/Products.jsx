@@ -42,11 +42,13 @@ const handleAddToWishlist=(product)=>{
          
           <h3 className='product-price'>${product.price}</h3>
           <h3>Rating :{product.rating.rate}</h3>
-          <button className='product-button'>Buy now</button>
+          
         </Link>
-        <div className=''>
-        <button onClick={() => handleAddToWishlist(product)}>Wishlist</button>
-        <button className='cart-button' onClick={() => handleAddToCart(product)}>Add-to cart</button>
+
+        <div style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
+        <button className='product-button'>Buy now</button>
+        <button className='product-button' onClick={() => handleAddToWishlist(product)}>Wishlist</button>
+        <button className='product-button' onClick={() => handleAddToCart(product)}>Add-to cart</button>
         </div>
       </div>
     ))}

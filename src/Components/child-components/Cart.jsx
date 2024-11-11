@@ -25,8 +25,15 @@ const Cart = () => {
                   src={product.image}
                   alt={product.title}
                 />
-                <p>Price: ${product.price}</p>
-                <button onClick={() => removeFromCart(product.id)}>
+                 <ul key={product.id}>
+            <li>
+            <p>{product.description}</p>
+            </li>
+          </ul>
+         
+          <h3 className='product-price'>${product.price}</h3>
+          <h3>Rating :{product.rating.rate}</h3>
+                <button className='product-button' onClick={() => removeFromCart(product.id)}>
                   Remove
                 </button>
               </div>

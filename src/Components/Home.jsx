@@ -4,9 +4,7 @@ import ImageSlider from './ImageSlider'
 function Home() {
   return (
     <>
-    <div className='space'>
-
-    </div>
+   
      <ImageSlider/>
     </>
    

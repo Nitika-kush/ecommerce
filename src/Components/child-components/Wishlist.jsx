@@ -1,44 +1,53 @@
 import React, { useContext } from "react";
 import { DataContext } from "../DataContext";
+import { MdRemoveShoppingCart } from "react-icons/md";
 
 const Wishlist = () => {
-  const { wishlist} = useContext(DataContext);
-  
+  const { wishlist, removeFromWishlist } = useContext(DataContext);
 
   return (
     <>
       <div className="space"></div>
       <div>
-        <h2 style={{ textAlign: "center"}}>Wishlist</h2>
+        <h3 style={{ textAlign: "center" }}>Wishlist</h3>
+        <div className="flex-start">
+        <ul >
         {wishlist.length === 0 ? (
           <p style={{ textAlign: "center" }}>Your Wishlist is empty.</p>
         ) : (
-          <div className="card">
+          <div className="card1">
             {wishlist.map((product) => (
-              <div key={product.id} className="product-description cart-item">
-                <h3>{product.title}</h3>
-                <img
-                  className="product-image"
-                  src={product.image}
-                  alt={product.title}
-                />
-                <ul key={product.id}>
-                  <li>
-                    <p>{product.description}</p>
-                  </li>
-                </ul>
-                <h3 className="product-price">${product.price}</h3>
-                <h3>Rating :{product.rating.rate}</h3>
-                <button
-                  className="product-button"
-                 /*  onClick={() => removeFromWishlist(product.id)} */
-                >
-                  Buy Now
-                </button>
+              <div key={product.id} className="product-description1 cart-item">
+                <h3>{product.title.slice(0,25)+"..."}</h3>
+                <div className="img-container">
+                  <img
+                    className="product-image"
+                    src={product.image}
+                    alt={product.title}
+                  />
+                </div>
+                <p>{product.description.slice(0, 100) + "..."}</p>
+                <h3 style={{marginTop:"5px"}}>Rating :{product.rating.rate}</h3>
+                <div className="btn-group">
+                  <h3 className="product-price">${product.price}</h3>
+
+                  <div className="but-group">
+                    <button
+                      title="remove from Whislist"
+                      className="product-button"
+                      onClick={() => removeFromWishlist(product.id)}
+                    >
+                      <MdRemoveShoppingCart />
+                      <span>remove</span>
+                    </button>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         )}
+         </ul>
+        </div>
       </div>
     </>
   );

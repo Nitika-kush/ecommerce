@@ -1,9 +1,9 @@
 import React,{useEffect,useState,useContext} from 'react'
 import {Link,Routes,Route} from 'react-router-dom'
-import ProductDetail from './child-components/ProductDetail';
 import { DataContext } from './DataContext'
-import { IoIosHeart } from "react-icons/io";
-import { BsCart } from "react-icons/bs";
+import { FaHeart } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
+import { TiShoppingCart } from "react-icons/ti";
 
 function Products() {
   const { user,addToCart,data ,toggleWishlist,wishlist} = useContext(DataContext);
@@ -18,13 +18,6 @@ function Products() {
       console.log('please Sign up to add product in cart')
     }
   }
-const handleWishlist=(product)=>{
-  if(user){
-    toggleWishlist(product);
-  }else{
-    console.log('please Sign up to add product in wishlist')
-  }
-}
 
   if (!data) {
     alert("Loading products...");
@@ -34,32 +27,30 @@ const handleWishlist=(product)=>{
     {data && data.map((product,index) => (
       <div key={index} className='product-description'>
         <Link to={`/product/${product.id}`}>
-          <h2 className='product-name'>{product.title}</h2>
-          <img className='product-image' src={product.image} alt={product.title} />
-          <ul key={product.id}>
-            <li>
-            <p>{product.description}</p>
-            </li>
-          </ul>
+          <h2 className='product-name'>{product.title.slice(0,15)+"..."}</h2>
+          <div style={{textAlign:'center'}}>
+ <img className='product-image' src={product.image} alt={product.title} />
+          </div>
          
+          <div className='btn-group'>
           <h3 className='product-price'>${product.price}</h3>
           <h3>Rating :{product.rating.rate}</h3>
           
+          </div>
+         
         </Link>
 
-        <div style={{display:"flex", alignItems:"center", justifyContent:"space-between"}}>
-        <button className='product-button'>Buy now</button>
-        <IoIosHeart onClick={()=>handleWishlist(product)}
-        style={{fontSize:"30px" ,color: wishlist.some((item)=>item.id===product.id)?"red":'gray'}} />
+        <div className='btn-group'>
+        <button className='wish-list' onClick={()=>toggleWishlist(product)}>
+        {wishlist.some((item)=>item.id===product.id)? <FaHeart fill='red' style={{ fontSize: "18px" }}/>:
+        <FaRegHeart style={{ fontSize: "18px" }} />}
+        WishList
+        </button>
 
-       {/*  <button className='product-button' onClick={() => handleWishlist(product)}
-        style={{
-                backgroundColor: wishlist.some((item) => item.id === product.id) ? 'green' : 'gray',
-                color: 'white'
-              }}
-            >
-              {wishlist.some((item) => item.id === product.id) ? <IoIosHeart/> : <IoIosHeart/>}</button> */}
-        <BsCart onClick={() => handleAddToCart(product)} style={{fontSize: '30px' }}/>
+        <button className='add-to-cart' onClick={()=>handleAddToCart(product)}>
+        <TiShoppingCart />
+        </button>
+
         </div>
       </div>
     ))}

@@ -10,7 +10,7 @@ const SignupForm= () => {
     confirmPassword:"",
   });
   const [errors, setErrors] = useState({});
-  const {user,signupUser}=useContext(DataContext);
+  const {signupUser}=useContext(DataContext);
   const navigate=useNavigate();
 
 
@@ -66,6 +66,8 @@ const SignupForm= () => {
             email: "",
             password: "",
             confirmPassword: "",
+            cart:[],
+            wishlist:[],
           });
         } else {
           signupUser(userData);

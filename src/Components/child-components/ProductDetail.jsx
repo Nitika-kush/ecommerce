@@ -13,14 +13,21 @@ console.log("Product ID from URL:", id);
 
   return (
     <>
-    <div style={{height:"600px"}} className='product-detail-container '>
+    <div className='product-detail-card '>
       {data.map((product)=>{
         if(id==product.id){
           return(
-            <div key={product.id} className='product-detail'>
-              <h1>{product.title}</h1>
-              <img className='product-image' src={product.image} alt={product.title} width="300px" height="300px"/>
+            <div key={product.id} className='product-container' style={{width:"600px", borderRadius:"5px"}}>
+              <h2 className='product-name'>{product.title}</h2>
+              <div style={{ textAlign: "center",marginTop:"10px",marginBottom:"10px"}}>
+                  <img
+                    className="product-image"
+                    src={product.image}
+                    alt={product.title}
+                  />
+                </div>
               <p>{product.description}</p>
+              <h3>Rating :{product.rating.rate}</h3>
               <p className='product-price'>${product.price}</p>
               <button className='product-detail-button'> Buy Now</button>
 

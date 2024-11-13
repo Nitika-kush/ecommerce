@@ -1,15 +1,10 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { DataContext } from "./DataContext";
 import { FaHome } from "react-icons/fa";
-import { IoIosLogIn } from "react-icons/io";
-import { FaHeart } from "react-icons/fa";
 import { BsCart } from "react-icons/bs";
 import { AiFillProduct } from "react-icons/ai";
 import { IoIosHeart } from "react-icons/io";
-
-
-
 
 function Navbar() {
   const { user, logoutUser, cart, wishlist } = useContext(DataContext);
@@ -24,16 +19,70 @@ function Navbar() {
       </div>
 
       <div className="tablink">
-        <Link to="/"><FaHome style={{fontSize: '30px' }}/></Link>
+        <div className="nav-single-btn">
+        <Link to="/">
+          <FaHome title="Home" style={{ fontSize: "21px" }} />
+          <span>Home</span>
+        </Link>
+        </div>
 
         {user ? (
           <>
-            <Link to="/product"><AiFillProduct style={{fontSize: '30px' }} /></Link>
-            <Link to="/cart"><BsCart style={{fontSize: '30px' }}/>({cart ? cart.length : 0})</Link>
+           <div className="nav-single-btn">
+           <Link to="/product">
+              <AiFillProduct title="Products" style={{ fontSize: "21px" }} />
+              <span>Products</span>
+            </Link>
+           </div>
+            <div className="nav-single-btn">
+            <NavLink to="/cart"
+             activeClassName="active-link" // Adds active-link class when the link is active
+             exact
+             >
+              <div style={{ position: "relative" }}>
+                <BsCart
+                  title="Cart"
+                  style={{ fontSize: "21px" }}
+                />
+                <sup
+                  style={{
+                    position: "absolute",
+                    top: "0px",
+                    right: "-10px",
+                    color: "black",
+                    borderRadius: "50%",
+                    padding: "0px 3px",
+                  }}
+                >
+                  {cart ? cart.length : 0}
+                </sup>
+              </div>
+              <span >Cart</span>
+            </NavLink>
+            </div>
+            <div className="nav-single-btn">
             <Link to="/wishlist">
-            <IoIosHeart style={{fill:"red" ,fontSize: '30px' }} /> ({wishlist ? wishlist.length : 0})
-{/*            <IoIosHeart style={{fontSize:"30px" ,color: wishlist ? wishlist.length : 0? "red":'gray'}}/>
- */}            </Link>
+              <div style={{ position: "relative" }}>
+                <IoIosHeart
+                  title="Wishlist"
+                  style={{  fill: 'red', fontSize: "21px" }}
+                />
+                <sup
+                  style={{
+                    position: "absolute",
+                    top: "0px",
+                    right: "-10px",
+                    color: "black",
+                    borderRadius: "50%",
+                    padding: "0px 3px",
+                  }}
+                >
+                  {wishlist ? wishlist.length : 0}
+                </sup>
+              </div>
+              <span>Wishlist</span>
+            </Link>
+            </div>
             <button className="logout-button" onClick={logoutUser}>
               Logout
             </button>

@@ -138,7 +138,7 @@ export const DataProvider = ({ children }) => {
   }
 
 
- /*  const addToWishlist = (product) => {
+   /* const addToWishlist = (product) => {
     if (user) {
       const exists = wishlist.some((wishlistProduct) => wishlistProduct.id === product.id);
       if (exists) {
@@ -162,7 +162,7 @@ export const DataProvider = ({ children }) => {
       console.log("Please Sign up to add products in the cart.");
     }
   };
-  
+   */
 
 
   
@@ -185,7 +185,7 @@ export const DataProvider = ({ children }) => {
     }
   };
   
- */
+
   const toggleWishlist = (product) => {
     if (user) {
       const exists = wishlist.some((wishlistProduct) => wishlistProduct.id === product.id);
@@ -257,7 +257,7 @@ export const DataProvider = ({ children }) => {
   return (
     <DataContext.Provider
       value={{ data, user, signupUser, 
-        loginUser, logoutUser,cart,addToCart,wishlist,toggleWishlist,removeFromCart}}
+        loginUser, logoutUser,cart,addToCart,wishlist,toggleWishlist,removeFromCart,removeFromWishlist}}
     >
       {children}
     </DataContext.Provider>

@@ -1,14 +1,25 @@
 import React,{useEffect,useState,useContext} from 'react'
 import {Link,Routes,Route} from 'react-router-dom'
 import { DataContext } from './DataContext'
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProducts } from '../redux/slice/productSlice'; 
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
 
-function Products() {
-  const { user,addToCart,data ,toggleWishlist,wishlist} = useContext(DataContext);
+function Products(){
+  const dispatch= useDispatch();
+const {products,status,error}= useSelector((state)=>state.products);
+
+useEffect(() => {
+  if (status === 'idle') {
+    dispatch(fetchProducts());
+  }
+}, [dispatch, status]);
+
+  const { user,addToCart ,toggleWishlist,wishlist} = useContext(DataContext);
  if(user){
-  console.log("data in Products Component", data);
+  console.log("data in Products Component", products);
  }
 
  const handleAddToCart=(product)=>{
@@ -20,7 +31,7 @@ function Products() {
   }
   return (
     <div className='card'>
-    {data && data.map((product,index) => (
+    {products && products.map((product,index) => (
       <div key={index} className='product-description'>
         <Link to={`/product/${product.id}`}>
           <h2 className='product-name'>{product.title.slice(0,15)+"..."}</h2>
@@ -55,3 +66,4 @@ function Products() {
 }
 
 export default Products
+

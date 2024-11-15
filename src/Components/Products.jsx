@@ -18,10 +18,6 @@ function Products() {
       console.log('please Sign up to add product in cart')
     }
   }
-
-  if (!data) {
-    alert("Loading products...");
-  }
   return (
     <div className='card'>
     {data && data.map((product,index) => (

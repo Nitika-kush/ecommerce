@@ -27,9 +27,9 @@ console.log("Product ID from URL:", id);
                   />
                 </div>
               <p>{product.description}</p>
-              <h3>Rating :{product.rating.rate}</h3>
+              <h3 className='product-rating'>Rating :{product.rating.rate}</h3>
               <p className='product-price'>${product.price}</p>
-              <button className='product-detail-button'> Buy Now</button>
+              <button className='product-button'> Buy Now</button>
 
             </div>
           )

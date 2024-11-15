@@ -35,9 +35,7 @@ function Navbar() {
             </Link>
            </div>
             <div className="nav-single-btn">
-            <NavLink to="/cart"
-             activeClassName="active-link" // Adds active-link class when the link is active
-             exact
+            <Link to="/cart"
              >
               <div style={{ position: "relative" }}>
                 <BsCart
@@ -58,7 +56,7 @@ function Navbar() {
                 </sup>
               </div>
               <span >Cart</span>
-            </NavLink>
+            </Link>
             </div>
             <div className="nav-single-btn">
             <Link to="/wishlist">

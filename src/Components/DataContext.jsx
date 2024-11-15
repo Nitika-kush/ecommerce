@@ -5,9 +5,6 @@ export const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
   const [data, setData] = useState([]);
-  /* const [user, setUser] = useState(()=>null);
-  const [cart,setCart]=useState([]);
-  const [wishlist,setWishlist]=useState([]); */
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
@@ -26,7 +23,7 @@ export const DataProvider = ({ children }) => {
   const navigate = useNavigate();
 
 
-
+/* 
   const getData = () => {
     fetch("http://localhost:3000/products")
       .then((response) => response.json())
@@ -38,7 +35,7 @@ export const DataProvider = ({ children }) => {
         console.log("Error fetching data:", error);
       });
   };
-
+ */
   const signupUser=(newUser)=>{
     const userWithEmptyCartWishlist={
       ...newUser,
@@ -136,33 +133,6 @@ export const DataProvider = ({ children }) => {
     }
    
   }
-
-
-   /* const addToWishlist = (product) => {
-    if (user) {
-      const exists = wishlist.some((wishlistProduct) => wishlistProduct.id === product.id);
-      if (exists) {
-        console.log("Product is already in the wishlist.");
-        return;
-      }
-      
-      const updatedWishlist = [...wishlist, product];
-      setWishlist(updatedWishlist);
-      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
-  
-
-      fetch(`http://localhost:3000/users/${user.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ wishlist: updatedWishlist }),
-      }).catch((error) => console.error("Error updating wishlist in backend:", error));
-    } else {
-      console.log("Please Sign up to add products in the cart.");
-    }
-  };
-   */
 
 
   

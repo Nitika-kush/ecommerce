@@ -9,7 +9,7 @@ const Cart = () => {
       <div className="space"></div>
       <div>
         <h3 style={{ textAlign: "center" }}>Shopping Cart</h3>
-        <ul style={{ padding: "8px" }}>
+        <ul>
           {cart.length === 0 ? (
             <p style={{ textAlign: "center" }}>Your cart is empty.</p>
           ) : (
@@ -24,9 +24,9 @@ const Cart = () => {
                       alt={product.title}
                     />
                   </div>
-                  <p>{product.description.slice(0, 100) + "..."}</p>
+                  <p>{product.description.slice(0, 80) + "..."}</p>
 
-                  <h3 style={{marginTop:"5px"}}>Rating :{product.rating.rate}</h3>
+                  <h3 className="product-rating">Rating :{product.rating.rate}</h3>
                   <div className="btn-group">
                     <h3 className="product-price">${product.price}</h3>
                     <div className="btn-group">

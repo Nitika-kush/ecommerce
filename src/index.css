@@ -116,9 +116,6 @@ body{
   border-radius: 8px;
   margin-top: 10px;
 }
-.product-detail-container{
-  height: 20px;
-}
 .product-description h2 {
   font-size: 20px;
   margin: 0 0 10px;
@@ -140,22 +137,9 @@ body{
 .product-price:hover {
   color: blue;
 }
-
-
-.product-detail-button {
-  width: 60px;
-  height: 30px;
-  margin-top: 10px;
-  padding: auto;
-  background-color: #1c8134;
-  color: white;
-  border: none;
-  border-radius: 5px;
+.product-rating{
+  margin-top: 5px;
   cursor: pointer;
-}
-
-.product-detail-button:hover {
-  background-color: #104b1e;
 }
 .product-button{
   width: 60px;

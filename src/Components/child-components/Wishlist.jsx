@@ -10,7 +10,7 @@ const Wishlist = () => {
       <div className="space"></div>
       <div>
         <h3 style={{ textAlign: "center" }}>Wishlist</h3>
-        <div className="flex-start">
+        {/* <div className="flex-start"> */}
         <ul >
         {wishlist.length === 0 ? (
           <p style={{ textAlign: "center" }}>Your Wishlist is empty.</p>
@@ -18,7 +18,7 @@ const Wishlist = () => {
           <div className="card1">
             {wishlist.map((product) => (
               <div key={product.id} className="product-description1 cart-item">
-                <h3>{product.title.slice(0,25)+"..."}</h3>
+                <h3>{product.title.slice(0,20)+"..."}</h3>
                 <div className="img-container">
                   <img
                     className="product-image"
@@ -26,7 +26,7 @@ const Wishlist = () => {
                     alt={product.title}
                   />
                 </div>
-                <p>{product.description.slice(0, 100) + "..."}</p>
+                <p>{product.description.slice(0, 80) + "..."}</p>
                 <h3 style={{marginTop:"5px"}}>Rating :{product.rating.rate}</h3>
                 <div className="btn-group">
                   <h3 className="product-price">${product.price}</h3>
@@ -47,7 +47,7 @@ const Wishlist = () => {
           </div>
         )}
          </ul>
-        </div>
+        {/* </div> */}
       </div>
     </>
   );

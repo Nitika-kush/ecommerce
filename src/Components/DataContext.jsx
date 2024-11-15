@@ -22,20 +22,6 @@ export const DataProvider = ({ children }) => {
 
   const navigate = useNavigate();
 
-
-/* 
-  const getData = () => {
-    fetch("http://localhost:3000/products")
-      .then((response) => response.json())
-      .then((responseData) => {
-        setData(responseData);
-        console.log("Fetched data:", responseData);
-      })
-      .catch((error) => {
-        console.log("Error fetching data:", error);
-      });
-  };
- */
   const signupUser=(newUser)=>{
     const userWithEmptyCartWishlist={
       ...newUser,

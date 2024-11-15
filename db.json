@@ -30,6 +30,15 @@
       "confirmPassword": "12345",
       "cart": [],
       "wishlist": []
+    },
+    {
+      "id": "740c",
+      "name": "riti",
+      "email": "riti@gmail.com",
+      "password": "12345",
+      "confirmPassword": "12345",
+      "cart": [],
+      "wishlist": []
     }
   ],
   "products": [

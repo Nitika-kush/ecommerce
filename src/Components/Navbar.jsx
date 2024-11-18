@@ -5,9 +5,11 @@ import { FaHome } from "react-icons/fa";
 import { BsCart } from "react-icons/bs";
 import { AiFillProduct } from "react-icons/ai";
 import { IoIosHeart } from "react-icons/io";
+import { useSelector } from "react-redux";
 
 function Navbar() {
-  const { user, logoutUser, cart, wishlist } = useContext(DataContext);
+const {cart} =useSelector(state=>state.cart);
+  const { user, logoutUser, wishlist } = useContext(DataContext);
   return (
     <div className="navbar">
       <div>

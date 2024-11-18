@@ -33,12 +33,27 @@ const SignupForm= () => {
     console.log(userData);
   
 
-    Object.keys(userData).forEach((key) => {
+    /* Object.keys(userData).forEach((key) => {
       if (userData[key].trim().length === 0) {
         newErrors[key] = `${key} is required`;
         formIsValid = false;
       }
+    }); */
+    Object.keys(userData).forEach((key) => {
+      const value = userData[key];
+
+      if (typeof value === 'string') {
+        if (value.trim().length === 0) {
+          newErrors[key] = `${key} is required`;
+          formIsValid = false;
+        }
+      } else if (Array.isArray(value) && value.length === 0) {
+        // For arrays (cart, wishlist), check if they're empty
+        newErrors[key] = `${key} cannot be empty`;
+        formIsValid = false;
+      }
     });
+
   
     if (userData.password !== userData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";

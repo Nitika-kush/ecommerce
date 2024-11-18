@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
-  const [data, setData] = useState([]);
+ // const [data, setData] = useState([]);
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
@@ -12,14 +12,14 @@ export const DataProvider = ({ children }) => {
   const [cart,setCart]=useState([]);
   const [wishlist,setWishlist]=useState([]);
  
-
+/* 
   useEffect(() => {
     fetch("http://localhost:3000/products")
     .then((response)=>(response.json()))
     .then((data)=>setData(data))
     .catch((error)=>console.error("product fetching error",error));
   },[]);
-
+ */
   const navigate = useNavigate();
 
   const signupUser=(newUser)=>{
@@ -212,7 +212,7 @@ export const DataProvider = ({ children }) => {
 
   return (
     <DataContext.Provider
-      value={{ data, user, signupUser, 
+      value={{  user, signupUser, 
         loginUser, logoutUser,cart,addToCart,wishlist,toggleWishlist,removeFromCart,removeFromWishlist}}
     >
       {children}

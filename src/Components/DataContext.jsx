@@ -4,216 +4,281 @@ import { useNavigate } from "react-router-dom";
 export const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
- // const [data, setData] = useState([]);
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
-  const [cart,setCart]=useState([]);
-  const [wishlist,setWishlist]=useState([]);
- 
-/* 
-  useEffect(() => {
-    fetch("http://localhost:3000/products")
-    .then((response)=>(response.json()))
-    .then((data)=>setData(data))
-    .catch((error)=>console.error("product fetching error",error));
-  },[]);
- */
   const navigate = useNavigate();
-
-  const signupUser=(newUser)=>{
-    const userWithEmptyCartWishlist={
-      ...newUser,
-      cart:[],
-      wishlist:[],
-    }
-   /*  setUser((prevUser) => {
-      const users = Array.isArray(prevUser) ? prevUser : [];
-      return [...users,userWithEmptyCartWishlist];
-    }); */
-    fetch("http://localhost:3000/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userWithEmptyCartWishlist),
-    }).then(() => {
-      navigate("/loginPage");
-    });
-
-  }
-
-  const loginUser = async (credentials) => {
-    try {
-      const response = await fetch("http://localhost:3000/users");
-      const users = await response.json();
-
-      const user = users.find(
-        (user) =>
-          user.email === credentials.email &&
-          user.password === credentials.password
-      );
-
-      if (user) {
-        setUser(user);
-        localStorage.setItem("user", JSON.stringify(user));
-        setCart(user.cart || []);
-        setWishlist(user.wishlist || []);
-        navigate("/");
-        return true;
-      } else {
-        console.error("Invalid credentials");
-        return false;
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      return false;
-    }
+  const initialUserData = {
+      id: '',
+      fullname: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      cart: [],
+      wishlist: []
   };
-
-
-  const addToCart = (product) => {
-    if (user) {
-      const exists = cart.some((cartItem) => cartItem.id === product.id);
-      if (exists) {
-        console.log("Product is already in the Cart.");
-        return;
-      }
-  
-     
-      const updatedCart = [...cart, product];
-      setCart(updatedCart);
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
-  
-     
-      fetch(`http://localhost:3000/users/${user.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ cart: updatedCart }),
-      }).catch((error) => console.error("Error updating cart in backend:", error));
-    } else {
-      console.log("Please sign up or log in to add products to the cart.");
-    }
-  };
-  
-
-  const removeFromCart=(productId)=>{
-    if(user){
-      const updatedCart = cart.filter((product) => product.id !== productId);
-      setCart(updatedCart);
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
-  
-     
-      fetch(`http://localhost:3000/users/${user.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ cart: updatedCart }), 
-      }).catch((error) => console.error("Error updating cart in backend:", error));
-    } else {
-      console.log("Please Sign up to remove products from the wishlist.");
-    }
-   
-  }
-
-
-  
-  const removeFromWishlist = (productId) => {
-    if (user) {
-      const updatedWishlist = wishlist.filter((product) => product.id !== productId);
-      setWishlist(updatedWishlist);
-      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
-  
-     
-      fetch(`http://localhost:3000/users/${user.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ wishlist: updatedWishlist }), 
-      }).catch((error) => console.error("Error updating wishlist in backend:", error));
-    } else {
-      console.log("Please Sign up to remove products from the wishlist.");
-    }
-  };
-  
-
-  const toggleWishlist = (product) => {
-    if (user) {
-      const exists = wishlist.some((wishlistProduct) => wishlistProduct.id === product.id);
-      
-      if (exists) {
-        const updatedWishlist = wishlist.filter((wishlistProduct) => wishlistProduct.id !== product.id);
-        setWishlist(updatedWishlist);
-        localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
-
-        fetch(`http://localhost:3000/users/${user.id}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ wishlist: updatedWishlist }),
-        }).catch((error) => console.error("Error updating wishlist in backend:", error));
-  
-      } else {
-        const updatedWishlist = [...wishlist, product];
-        setWishlist(updatedWishlist);
-        localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
-  
-        fetch(`http://localhost:3000/users/${user.id}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ wishlist: updatedWishlist }),
-        }).catch((error) => console.error("Error updating wishlist in backend:", error));
-      }
-    } else {
-      console.log("Please sign up or log in to manage your wishlist.");
-    }
-  };
-  
  
-  const logoutUser = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    localStorage.removeItem("cart");
-    localStorage.removeItem("wishlist");
-    setUser(null);
-    setCart([]);
-    setWishlist([]);
-    navigate("/");
-  };
+  const [usersData, setUsersData] = useState(()=>{
+    const storedUserData = localStorage.getItem('usersData');
+    return storedUserData ? JSON.parse(storedUserData) : initialUserData;
+});
+const [allUsersData, setAllUsersData] = useState([]); 
 
   useEffect(() => {
-    if (user) {
-    
-      fetch(`http://localhost:3000/users/${user.id}`)
-        .then((response) => response.json())
-        .then((userData) => {
-          
-          setCart(userData.cart || []);
-          setWishlist(userData.wishlist || []);
-        })
-        .catch((error) => {
-          console.error("Error fetching user data:", error);
-        });
-    } else {
-     
-      setCart([]);
-      setWishlist([]);
-    }
-  }, [user]); 
-  
+    const fetchUsers = async () => {
+        await getUser();
+    };
+    fetchUsers();
+}, []);
+useEffect(()=>{
+    localStorage.setItem('usersData',JSON.stringify(usersData))
+},[usersData])
 
+const [data, setData] = useState([]);
+
+const getData = async () => {
+  await fetch("http://localhost:3000/products", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((response) => setData(response));
+};
+
+useEffect(() => {
+  if (data.length === 0) {
+    getData();
+    console.log("...fetching data");
+  }
+}, [data]);
+
+const getUser = async () => {
+  try {
+      const response = await fetch("http://localhost:3000/users", {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      });
+      if (response.ok) {
+          const users = await response.json();
+          setAllUsersData(users); 
+          users.forEach(user => {
+              if (!Array.isArray(user.cart)) {
+                  user.cart = [];
+              }
+          });
+          return users; 
+      } else {
+          console.log("Failed to get data");
+          return [];
+      }
+  } catch (error) {
+      console.log("Error:", error);
+      return [];
+  }
+};
+  const signupUser = async (newUser) => {
+    try {
+        const response = await fetch("http://localhost:3000/users", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newUser),
+        });
+
+        if (response.ok) {
+            const createdUser = await response.json();
+            setUsersData(createdUser);
+            setAllUsersData((prevUsers) => [...prevUsers, createdUser]);
+            console.log("User is created Successfully");
+            navigate('/loginPage'); 
+            
+        } else {
+            console.error('Failed to sign up');
+        }
+    } catch (error) {
+        console.error('Error during signup:', error);
+    }
+};
+
+
+/* const loginUser = async (credentials) => {
+  try {
+      const response = await fetch(`http://localhost:3000/users?email=${encodeURIComponent(credentials.email)}&password=${encodeURIComponent(credentials.password)}`, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      });
+
+      if (response.ok) {
+          const users = await response.json();
+          if (users.length > 0) {
+              setUsersData(users[0]);
+              navigate('/');
+              toast('login successfully')
+              return true;
+          } else {
+              toast.error('Invalid credentials');
+              return false;
+          }
+      } else {
+          console.error('Failed to login');
+          return false;
+      }
+  } catch (error) {
+      console.error('Error:', error);
+      return false;
+  }
+};
+ */
+/* 
+const addToCart = async (product) => {
+  try {
+      if (!usersData.id) {
+          console.error("User ID is missing. Cannot update cart.");
+          return;
+      }
+      const isProductInCart = usersData.cart.some(item => item.id === product.id);
+      if (isProductInCart) {
+          toast.error("Product is already in the cart");
+          return;
+      }
+
+
+      const updatedCart = Array.isArray(usersData.cart) ? [...usersData.cart, product] : [product];
+      setUsersData((prevData) => ({
+          ...prevData,
+          cart: updatedCart
+      }));
+
+      const response = await fetch(`http://localhost:3000/users/${usersData.id}`, {
+          method: 'PATCH',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ cart: updatedCart })
+      });
+
+      if (!response.ok) {
+          toast.error('Failed to update cart in backend');
+      } else {
+          toast.success('Cart successfully updated in backend');
+      }
+  } catch (error) {
+      console.error('Error updating cart:', error);
+  }
+};
+
+const removeFromCart =async(productId)=>{
+  try {
+      if (!usersData.id) {
+          console.error("User ID is missing. Cannot update cart.");
+          return;
+      }
+      const updatedCart = usersData.cart.filter(product=>product.id!==productId)
+      setUsersData((prevData) => ({
+          ...prevData,
+          cart: updatedCart
+      }));
+
+      const response = await fetch(`http://localhost:3000/users/${usersData.id}`, {
+          method: 'PATCH',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ cart: updatedCart })
+      });
+
+      if (!response.ok) {
+          toast.error('Failed to update cart in backend');
+      } else {
+          toast.success('Cart successfully updated in backend');
+      }
+  } catch (error) {
+      console.error('Error updating cart:', error);
+  }
+} */
+/* 
+const removeFromWishlist =async(productId)=>{
+  try {
+      if (!usersData.id) {
+          console.error("User ID is missing. Cannot update cart.");
+          return;
+      }
+
+      const updatedWishlist = usersData.wishlist.filter(product=>product.id!==productId)
+      setUsersData((prevData) => ({
+          ...prevData,
+          wishlist: updatedWishlist
+      }));
+
+      const response = await fetch(`http://localhost:3000/users/${usersData.id}`, {
+          method: 'PATCH',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ wishlist: updatedWishlist })
+      });
+
+      if (!response.ok) {
+          toast.error('Failed to update wishlist in backend');
+      } else {
+          toast.success('Wishlist successfully updated in backend');
+      }
+  } catch (error) {
+      console.error('Error updating Wishlist:', error);
+  }
+}
+
+const toggleWishlist = (product) => {
+  if (!usersData.id) {
+      console.error("User ID is missing. Cannot update wishlist.");
+      return;
+  }
+
+  const isProductInWishlist = usersData.wishlist.some(item => item.id === product.id);
+  const updatedWishlist = isProductInWishlist
+      ? usersData.wishlist.filter(item => item.id !== product.id)
+      : [...usersData.wishlist, product];
+
+  setUsersData((prevData) => ({
+      ...prevData,
+      wishlist: updatedWishlist
+  }));
+
+  const updateWishlistInBackend = async () => {
+      try {
+          const response = await fetch(`http://localhost:3000/users/${usersData.id}`, {
+              method: 'PATCH',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ wishlist: updatedWishlist })
+          });
+
+          if (!response.ok) {
+              console.error('Failed to update wishlist in backend');
+          } else {
+              console.log('Wishlist successfully updated in backend');
+          }
+      } catch (error) {
+          console.error('Error updating wishlist:', error);
+      }
+  };
+
+  updateWishlistInBackend();
+};
+   */
+ 
+   const logoutUser = () => {
+        localStorage.removeItem('token','usersData');
+        setUsersData(initialUserData); 
+        navigate('/');
+    };
   return (
     <DataContext.Provider
-      value={{  user, signupUser, 
-        loginUser, logoutUser,cart,addToCart,wishlist,toggleWishlist,removeFromCart,removeFromWishlist}}
+      value={{ usersData,data,setData, allUsersData, signupUser, /* loginUser, */ logoutUser, getUser, setUsersData/* , addToCart,removeFromCart,removeFromWishlist,toggleWishlist */ }}
     >
       {children}
     </DataContext.Provider>

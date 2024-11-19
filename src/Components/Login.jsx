@@ -1,60 +1,74 @@
-import React, { useContext, useState } from "react";
+import React, { useEffect,useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { DataContext } from "./DataContext";
+//import { DataContext } from "./DataContext";
+import { useDispatch } from "react-redux";
+import { loggedUser } from "../redux/slice/usersSlice";
+
 
 const Login = () => {
+  const [usersData, setUsersData] = useState([]);
   const [input, setInput] = useState({
     email: "",
     password: "",
-  }); 
+  });
   const [errors, setErrors] = useState({});
-  const [token, setToken] = useState(null); 
-  const { loginUser } = useContext(DataContext);
-  const navigate =useNavigate();
-    
-  function generateRandomToken() {
-    return Math.random().toString(36); 
-  }
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleSubmit = (event) => {
+
+  useEffect(() => {
+    fetchUsersData();
+  }, []);
+
+  const fetchUsersData = async () => {
+    const res = await fetch("http://localhost:3000/users");
+    const data = await res.json();
+    setUsersData(data);
+  };
+    
+  const generateToken = () => {
+    return Math.random().toString(8);
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    let userIsValid = true,
-      newErrors = {};
+    let userIsValid = true;
+    const newErrors = {};
 
     Object.keys(input).forEach((key) => {
-      if (input[key].trim().length === 0) {
-        newErrors[key] = `${key} is required`;
+      if (!input[key].trim()) {
+        newErrors[key] = "This field is required";
         userIsValid = false;
       }
     });
-    setErrors(newErrors);
-   
-    if (userIsValid) {
-      const success = loginUser(input);
-      
-      if (!success) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          invalidCred: "Invalid email or password",
-        }));
-      } else {
-        const newToken = generateRandomToken();
-        setToken(newToken); 
-        localStorage.setItem("token",newToken);
-        navigate('/');
 
-        setInput({
-          email: "",
-          password: "",
-        });
-        setErrors({});
-      }
+    if (!userIsValid) {
+      setErrors(newErrors);
+      return;
+    }
+
+    const foundUser = usersData.find(
+      (user) => user.email === input.email && user.password === input.password
+    );
+
+    if (foundUser) {
+      dispatch(loggedUser(foundUser));
+      const token = generateToken();
+     // console.log(token);
+      localStorage.setItem("token", token);
+      localStorage.setItem("usersData", JSON.stringify(foundUser));
+      navigate("/");
+    } else {
+      setErrors({ invalidCred: "Invalid email or password" });
     }
   };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(value),
-      setInput((prevInput) => ({ ...prevInput, [name]: value }));
+    setInput((prevInput) => ({
+      ...prevInput,
+      [name]: value,
+    }));
 
     if (value.trim()) {
       setErrors((prevErrors) => ({

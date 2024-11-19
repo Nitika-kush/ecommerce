@@ -1,60 +1,46 @@
 import React, { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import { DataContext } from './DataContext';
 
 const SignupForm= () => {
   const [userData, setUserData] = useState({
-    name:"",
-    email:"",
-    password:"",
-    confirmPassword:"",
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    cart:[],
+    wishlist:[]
   });
   const [errors, setErrors] = useState({});
   const {signupUser}=useContext(DataContext);
-  const navigate=useNavigate();
 
 
-  const handleChange=(e)=>{
-    const {name,value}=e.target;
-    setUserData((prevData)=>({...prevData,[name]:value}));
-
-    if(value.trim()){
-      setErrors((prevErrors)=>({
-        ...prevErrors,
-        [name]:"",
-      }))
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData((prevData) => ({
+        ...prevData,
+        [name]: value
+    }));
+    if (value.trim()) {
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: ""
+        }));
     }
-  }
+};
 
-  const handleSubmit = async(event) => {
-    event.preventDefault();
-    let formIsValid = true;
-    const newErrors = {};
-    console.log(userData);
-  
 
-    /* Object.keys(userData).forEach((key) => {
-      if (userData[key].trim().length === 0) {
-        newErrors[key] = `${key} is required`;
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  let formIsValid = true;
+  const newErrors = {};
+
+  Object.keys(userData).forEach((key) => {
+    if (!userData[key]) {
+        newErrors[key] = 'This field is required.';
         formIsValid = false;
-      }
-    }); */
-    Object.keys(userData).forEach((key) => {
-      const value = userData[key];
-
-      if (typeof value === 'string') {
-        if (value.trim().length === 0) {
-          newErrors[key] = `${key} is required`;
-          formIsValid = false;
-        }
-      } else if (Array.isArray(value) && value.length === 0) {
-        // For arrays (cart, wishlist), check if they're empty
-        newErrors[key] = `${key} cannot be empty`;
-        formIsValid = false;
-      }
-    });
-
-  
+    }
+});
     if (userData.password !== userData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
       formIsValid = false;
@@ -86,7 +72,6 @@ const SignupForm= () => {
           });
         } else {
           signupUser(userData);
-
         }
       } catch (error) {
         console.error("Error fetching users:", error);

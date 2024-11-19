@@ -3,37 +3,88 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { TiShoppingCart } from 'react-icons/ti';
-import { addToCart } from '../redux/slice/cartSlice'; 
-import { fetchProducts } from '../redux/slice/productSlice'; 
-import { DataContext } from './DataContext'; 
+import { fetchProducts } from "../redux/slice/productSlice";
+import { addItemToCart} from "../redux/slice/usersSlice";
 
 function Products() {
+  const token = localStorage.getItem("token");
   const dispatch = useDispatch();
-  const { cart } = useSelector((state) => state.cart);
-  const { products, status, error } = useSelector((state) => state.products);
-  
-  const { user, toggleWishlist, wishlist } = useContext(DataContext); 
+  const productData = useSelector((state) => state.product.products);
+  const wishlistData = useSelector((state) => state.users.wishlist);
+  const userId = useSelector((state) => state.users.id);
+  const user = useSelector((state) => state.users);
 
   useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchProducts());
-    }
-  }, [dispatch, status]);
+    dispatch(fetchProducts());
+  }, []);
 
-  const handleAddToCart = (product) => {
-    if (user) {
-      dispatch(addToCart(product)); 
-      const updatedCart = [...cart, product]; 
-      localStorage.setItem('cart', JSON.stringify({ userId: user.id, items: updatedCart })); 
-    } else {
-      console.log('Please Sign up to add product to cart');
+  const isWishlistItemExist = (productId) => {
+    return wishlistData.some((item) => item.id === productId);
+  };
+
+  const handleWishlistToggle = async (product) => {
+    dispatch(toggleItemToWishlist(product));
+    try {
+      let updatedWishlist;
+      if (isWishlistItemExist(product.id)) {
+        updatedWishlist = user.wishlist.filter(
+          (item) => item.id !== product.id
+        );
+      } else {
+        updatedWishlist = [...user.wishlist, product];
+      }
+      const updateResponse = await fetch(
+        `http://localhost:3000/users/${userId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...user,
+            wishlist: updatedWishlist,
+          }),
+        }
+      );
+
+      if (!updateResponse.ok) {
+        throw new Error("Failed to update wishlist");
+      }
+      console.log("Wishlist updated successfully!");
+    } catch (error) {
+      console.error("Error updating wishlist:", error);
     }
   };
-  
+
+  const handleAddToCart = async (product) => {
+    dispatch(addItemToCart(product));
+    try {
+      const updatedCart = [...user.cart, product];
+      const updateResponse = await fetch(
+        `http://localhost:3000/users/${userId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...user,
+            cart: updatedCart,
+          }),
+        }
+      );
+
+      if (!updateResponse.ok) {
+        throw new Error("Failed to update cart");
+      }
+    } catch (error) {
+      console.error("Error adding item to cart:", error);
+    }
+  };
 
   return (
     <div className='card'>
-      {products && products.map((product, index) => (
+      {productData && productData.map((product, index) => (
         <div key={index} className='product-description'>
           <Link to={`/product/${product.id}`}>
             <h2 className='product-name'>{product.title.slice(0, 15) + '...'}</h2>
@@ -47,8 +98,8 @@ function Products() {
           </Link>
 
           <div className='btn-group'>
-            <button className='wish-list' onClick={() => toggleWishlist(product)}>
-              {wishlist.some((item) => item.id === product.id) ? (
+            <button className='wish-list' onClick={() => handleWishlistToggle(product)}>
+              {isWishlistItemExist(product.id) ? (
                 <FaHeart fill='red' style={{ fontSize: '18px' }} />
               ) : (
                 <FaRegHeart style={{ fontSize: '18px' }} />
@@ -66,4 +117,5 @@ function Products() {
   );
 }
 
+// Ensure this is the default export
 export default Products;

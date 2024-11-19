@@ -1,23 +1,29 @@
-/* import { configureStore } from "@reduxjs/toolkit";
-import productsReducer from './slice/productSlice'
-import usersReducer from './slice/usersSlice'
-const store= configureStore({
-reducer:{
-products:productsReducer,
-users: usersReducer,
-}
-})
-export default store; */
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import productData from "./slice/productSlice";
+import userData from "./slice/usersSlice";
+import persistReducer from "redux-persist/es/persistReducer";
+import persistStore from "redux-persist/es/persistStore";
+import storage from 'redux-persist/lib/storage';
 
-import { configureStore } from '@reduxjs/toolkit';
-import productsReducer from './slice/productSlice';
-import cartReducer from './slice/cartSlice'; 
-
-const store = configureStore({
-  reducer: {
-    products: productsReducer, 
-    cart: cartReducer,
-  },
+const rootReducer = combineReducers({
+  product: productData,
+  users: userData,
 });
 
-export default store;
+const persistConfig = {
+  key: 'Root',
+  storage,
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+/* export default () => {
+  let store = createStore(persistedReducer)
+  let persistor = persistStore(store)
+  return { store, persistor }
+}
+ */
+export const store = configureStore({
+  reducer: persistedReducer,
+});
+
+export const persistor = persistStore(store);

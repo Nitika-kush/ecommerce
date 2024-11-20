@@ -1,9 +1,42 @@
 import React, { useContext } from "react";
 import { DataContext } from "../DataContext";
+import { useDispatch,useSelector } from "react-redux";
 import { MdRemoveShoppingCart } from "react-icons/md";
+import { removeItemFromWishlist } from "../../redux/slice/usersSlice";
 
 const Wishlist = () => {
-  const { wishlist, removeFromWishlist } = useContext(DataContext);
+  // const { wishlist, removeFromWishlist } = useContext(DataContext);
+  const wishlistData =useSelector((state)=>state.users.wishlist)
+  const userId =useSelector((state)=>state.users.id)
+  const user = useSelector((state)=>state.users)
+  const dispatch = useDispatch();
+
+  const handleRemove=async(id)=>{
+    dispatch(removeItemFromWishlist(id));
+    try{
+      let updatedWishlist;
+      updatedWishlist = wishlistData.filter((item) => item.id !== id);
+      const updateResponse = await fetch(
+        `http://localhost:3000/users/${userId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...user,
+            cart: updatedWishlist,
+          }),
+        }
+      );
+      if(!updateResponse.ok){
+        throw new Error("failed to update wishlist");
+      }
+      console.log("wishlist updated successfully");
+    }catch{
+      console.error("Error in this");
+    }
+  }
 
   return (
     <>
@@ -12,11 +45,11 @@ const Wishlist = () => {
         <h3 style={{ textAlign: "center" }}>Wishlist</h3>
         {/* <div className="flex-start"> */}
         <ul >
-        {wishlist.length === 0 ? (
+        {wishlistData.length === 0 ? (
           <p style={{ textAlign: "center" }}>Your Wishlist is empty.</p>
         ) : (
           <div className="card1">
-            {wishlist.map((product) => (
+            {wishlistData.map((product) => (
               <div key={product.id} className="product-description1 cart-item">
                 <h3>{product.title.slice(0,20)+"..."}</h3>
                 <div className="img-container">
@@ -35,7 +68,7 @@ const Wishlist = () => {
                     <button
                       title="remove from Whislist"
                       className="product-button"
-                      onClick={() => removeFromWishlist(product.id)}
+                      onClick={() => handleRemove(product.id)}
                     >
                       <MdRemoveShoppingCart />
                       <span>remove</span>

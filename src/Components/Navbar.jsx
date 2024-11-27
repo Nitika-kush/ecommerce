@@ -9,9 +9,20 @@ import { DataContext } from "./DataContext";
 
 function Navbar() {
   const token = localStorage.getItem('token');
+  const [cartCount,setCartCount]=useState(0);
+  const [wishlistCount,setwishlistCount]=useState(0);
   const cartData = useSelector((state) => state.users.cart);
   const wishlistData = useSelector((state) => state.users.wishlist);
   const { logoutUser} = useContext(DataContext);
+
+useEffect(()=>{
+  setCartCount(cartData.length);
+},[cartData]);
+
+useEffect(()=>{
+  setwishlistCount(wishlistData.length);
+},[wishlistData]);
+
   return (
     <div className="navbar">
       <div>
@@ -48,7 +59,7 @@ function Navbar() {
                       padding: "0px 3px",
                     }}
                   >
-                    {cartData.length}
+                    {cartCount}
                   </sup>
                 </div>
                 <span>Cart</span>
@@ -68,7 +79,7 @@ function Navbar() {
                       padding: "0px 3px",
                     }}
                   >
-                     {wishlistData.length}
+                     {wishlistCount}
                   </sup>
                 </div>
                 <span>Wishlist</span>

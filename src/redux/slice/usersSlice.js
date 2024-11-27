@@ -39,6 +39,7 @@
           state.wishlist=state.wishlist.filter((item)=> item.id !==action.payload);
           console.log("Item is Deleted from Wishlist")
         },
+      
         toggleItemToWishlist :(state,action)=>{
           const item=action.payload;
           const existingItem =state.wishlist.find((product)=> product.id===item.id);
@@ -50,7 +51,7 @@
             state.wishlist=state.wishlist.filter((product)=> product.id !==item.id);
             console.log("Product is already in Wishlist ,removed from wishlist");
           }
-        }
+        },
       },
     });
 

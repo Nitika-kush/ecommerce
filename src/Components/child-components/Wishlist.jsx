@@ -7,15 +7,21 @@ import { removeItemFromWishlist } from "../../redux/slice/usersSlice";
 const Wishlist = () => {
   // const { wishlist, removeFromWishlist } = useContext(DataContext);
   const wishlistData =useSelector((state)=>state.users.wishlist)
+  // const {usersData}=useContext(DataContext);
   const userId =useSelector((state)=>state.users.id)
   const user = useSelector((state)=>state.users)
   const dispatch = useDispatch();
+ 
+  if(!wishlistData){
+    return <div>
+      please Login to see the wishlist
+    </div>
+  }
 
   const handleRemove=async(id)=>{
     dispatch(removeItemFromWishlist(id));
     try{
-      let updatedWishlist;
-      updatedWishlist = wishlistData.filter((item) => item.id !== id);
+      let updatedWishlist= wishlistData.filter((item) => item.id !== id);
       const updateResponse = await fetch(
         `http://localhost:3000/users/${userId}`,
         {
@@ -25,7 +31,7 @@ const Wishlist = () => {
           },
           body: JSON.stringify({
             ...user,
-            cart: updatedWishlist,
+            wishlist: updatedWishlist,
           }),
         }
       );
@@ -45,11 +51,9 @@ const Wishlist = () => {
         <h3 style={{ textAlign: "center" }}>Wishlist</h3>
         {/* <div className="flex-start"> */}
         <ul >
-        {wishlistData.length === 0 ? (
-          <p style={{ textAlign: "center" }}>Your Wishlist is empty.</p>
-        ) : (
+        {wishlistData && wishlistData.length > 0 ?  (
           <div className="card1">
-            {wishlistData.map((product) => (
+            {wishlistData && wishlistData.map((product) => (
               <div key={product.id} className="product-description1 cart-item">
                 <h3>{product.title.slice(0,20)+"..."}</h3>
                 <div className="img-container">
@@ -78,7 +82,9 @@ const Wishlist = () => {
               </div>
             ))}
           </div>
-        )}
+        ):(
+          <p style={{ textAlign: "center" }}>Your Wishlist is empty.</p>
+        ) }
          </ul>
         {/* </div> */}
       </div>

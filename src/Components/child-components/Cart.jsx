@@ -49,9 +49,7 @@ const Cart = () => {
       <div>
       <h3 style={{ textAlign: "center" }}>Shopping Cart</h3>
         <ul style={{ padding: "8px" }}>
-          {cartData.length === 0 ? (
-            <p style={{ textAlign: "center" }}>Your cart is empty.</p>
-          ) : (
+          {cartData && cartData.length > 0 ? (
             <div className="card1" style={{ padding: "5px" }}>
               {cartData.map((product) => (
                 <div key={product.id} className="product-description1 cart-item">
@@ -81,6 +79,8 @@ const Cart = () => {
                 </div>
               ))}
             </div>
+          ):(
+            <p style={{ textAlign: "center" }}>Your cart is empty.</p>
           )}
         </ul>
       </div>

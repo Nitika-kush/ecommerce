@@ -14,6 +14,7 @@ function Products() {
   const user = useSelector((state) => state.users);
   const [sortOrder,setSortOrder]=useState("");
   const [category,setCategory]=useState("");
+  const [priceRange,setPriceRange]=useState('');
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -31,20 +32,44 @@ function Products() {
   })
 }
 
+const priceRanges=[
+  {label:"All price",min:0,max:1500},
+  {label:"$1-$200",min:1,max:200},
+  {label:"$201-$400",min:201,max:400},
+  {label:"$401-$600",min:401,max:600},
+  {label:"$601-$800",min:601,max:800},
+  {label:"$801-$1000",min:801,max:1000},
+]
+
+const handleSelectedRange=(e)=>{
+  const selectedRange=priceRanges[e.target.value];
+  setPriceRange(selectedRange);
+}
+
+const filterByPriceRange=(products,selectedRange)=>{
+ console.log("selected range",selectedRange)
+// console.log("price ranges",priceRanges)
+ if(selectedRange==='')return products;
+return products.filter((product)=>
+product.price>=selectedRange.min && product.price<=selectedRange.max); 
+}
 
 const filterByCategory=(products,selectedCategory)=>{
-  console.log(selectedCategory);
+  //console.log("selected Category",selectedCategory);
   if(selectedCategory==="") return products;
   return products.filter((product)=>product.category==selectedCategory)
 }
+const filterByPrice=filterByPriceRange(productData,priceRange);
+console.log("filterByPrice",filterByPrice);
 
-const filteredProducts=filterByCategory(productData,category);
-console.log(filteredProducts);
+const filteredProducts=filterByCategory(filterByPrice,category);
+//console.log("filteredProducts",filteredProducts);
+
 const sortedProducts=sortProducts(filteredProducts ,sortOrder); 
-console.log(sortedProducts);
+//console.log("sorted products",sortedProducts);
 
 const  uniqueCategories=Array.from(new Set(productData.map((product)=>product.category)));
-console.log(uniqueCategories);
+console.log("array of category",uniqueCategories);
 
   const isWishlistItemExist = (productId) => {
     return wishlistData.some((item) => item.id === productId);
@@ -107,6 +132,7 @@ try{
     }
   };
 
+
   return (
     <>
     <div style={{textAlign:"center", marginTop:"35px",display:"flex",alignContent:"center",justifyContent:"center" ,gap:"20px"}}>
@@ -133,14 +159,13 @@ try{
               <option value="electronics">Electronics</option>
               <option value="women's clothing">Women's clothing</option> */}
             </select>
-            <label htmlFor="sortByRange">Sort by Price-Range</label>
-    <select name="sortByRange" value={sortOrder} onChange= {(e)=>setSortOrder(e.target.value)} >
-      <option value="">select any option</option>
-    <option value="$0-&200">$0-&200</option>
-    <option value="$201-$400">$201-$400</option>
-    <option value="$401-$600">$401-$600</option>
-    <option value="$601-$800">$601-$800</option>
-    <option value="$801-$1000">$801-$1000</option>
+            <label htmlFor="sortByRange">filter by Price-Range</label>
+    <select name="sortByRange" onChange= {handleSelectedRange} >
+      {priceRanges.map((range,index)=>(
+       <option key={index} value={index}>
+        {range.label}
+       </option>
+      ))}
     </select>
     </div>
    
